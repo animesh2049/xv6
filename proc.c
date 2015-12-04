@@ -176,8 +176,9 @@ exit(void)
 {
   struct proc *p;
   int fd;
+  acquire(&tickslock);
   proc->etime = ticks;
-  cprintf("ctime :%d rtime :%d wtime :%d etime is:%d\n",proc->ctime, proc->rtime, proc->etime - proc->ctime - proc->rtime, proc->etime);
+  release(&tickslock);
   if(proc == initproc)
     panic("init exiting");
 
@@ -420,8 +421,9 @@ kill(int pid)
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
       p->killed = 1;
+	  acquire(&tickslock);
 	  p->etime = ticks;
-	  cprintf("ctime :%d rtime :%d wtime :%d\n",p->ctime, p->rtime, p->etime - p->ctime - p->rtime);
+	  release(&tickslock);
       // Wake process from sleep if necessary.
       if(p->state == SLEEPING)
         p->state = RUNNABLE;

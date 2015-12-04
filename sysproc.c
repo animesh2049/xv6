@@ -93,9 +93,16 @@ sys_uptime(void)
 int
 sys_waitx(void)
 {
+  int status = wait();
+  cprintf("pid of current process is:%d\n", proc->pid);
   int n1, n2;
   if((argint(0, &n1) < 0) && (argint(1, &n2) < 0)){
 	return -1;
   }
-  return 0;
+  *(int *)n1 = proc->rtime;
+  acquire(&tickslock);
+  *(int *)n2 = ticks - proc->ctime - proc->rtime;
+  release(&tickslock);
+  cprintf("create time is:%d etime is:%d rtime is:%d wait time is:%d\n", proc->ctime, proc->etime, n1, n2);
+  return status;
 }
