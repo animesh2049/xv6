@@ -143,6 +143,7 @@ fork(void)
     return -1;
   }
   np->ctime = (int)ticks;  // intialize ctime to ticks an inbuilt funtion of xv6
+  np->rtime = 0;
   np->sz = proc->sz;
   np->parent = proc;
   *np->tf = *proc->tf;
@@ -175,7 +176,8 @@ exit(void)
 {
   struct proc *p;
   int fd;
-
+  proc->etime = ticks;
+  cprintf("ctime :%d rtime :%d wtime :%d etime is:%d\n",proc->ctime, proc->rtime, proc->etime - proc->ctime - proc->rtime, proc->etime);
   if(proc == initproc)
     panic("init exiting");
 
@@ -418,6 +420,8 @@ kill(int pid)
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
       p->killed = 1;
+	  p->etime = ticks;
+	  cprintf("ctime :%d rtime :%d wtime :%d\n",p->ctime, p->rtime, p->etime - p->ctime - p->rtime);
       // Wake process from sleep if necessary.
       if(p->state == SLEEPING)
         p->state = RUNNABLE;
