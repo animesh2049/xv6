@@ -28,8 +28,8 @@ main(int argc, char *argv[])
 	printf(2, "command not supported\n");
 	exit();
   }
-  int mypid = getpid();
-  printf(1, "my pid from start is:%d\n", mypid);
+  //int mypid = getpid();
+  //printf(1, "my pid from start is:%d\n", mypid);
   pid = fork();
   if(pid < 0)
   {

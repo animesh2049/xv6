@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "spinlock.h"
 
 int
 sys_fork(void)
@@ -93,16 +94,12 @@ sys_uptime(void)
 int
 sys_waitx(void)
 {
+  int n1, n3;
   int status = wait();
-  cprintf("pid of current process is:%d\n", proc->pid);
-  int n1, n2;
-  if((argint(0, &n1) < 0) && (argint(1, &n2) < 0)){
-	return -1;
-  }
-  *(int *)n1 = proc->rtime;
+  argint(0, &n1) ; argint(1, &n3); 
   acquire(&tickslock);
-  *(int *)n2 = ticks - proc->ctime - proc->rtime;
+  *(int *)(n1) = proc->rtime;
+  *(int *)(n3) = ticks-proc->ctime-proc->rtime;
   release(&tickslock);
-  cprintf("create time is:%d etime is:%d rtime is:%d wait time is:%d\n", proc->ctime, proc->etime, n1, n2);
   return status;
 }
