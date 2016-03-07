@@ -3,7 +3,7 @@ New implemented systemcall is "waitx".
 It extends the preimplemented system call wait in addition it also tells the wait time and runtime of a process. 
 New implemented command is "mycomm".You can run commands like 'mycomm mkdir mydir", it will give you the run and wait time of command "mkdir mydir" by calling waitx.
 
-***********************************************************************************************************************
+****************************************************************************************************
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
